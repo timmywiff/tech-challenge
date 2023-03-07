@@ -1,0 +1,6 @@
+{
+  // "import/extensions": ["error", {
+  //   "js": "always"
+  // }],
+  "extends": ["@nodescript/eslint-config"]
+}

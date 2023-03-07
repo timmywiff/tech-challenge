@@ -1,0 +1,48 @@
+{
+  "name": "ubio2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "out/bin/serve.js",
+  "type": "module",
+  "scripts": {
+    "start": "node out/bin/serve.js",
+    "dev": "npm run clean && tsc -w",
+    "lint": "eslint --ext=.js,.ts --cache .",
+    "clean": "rm -rf out",
+    "compile": "npm run clean && tsc",
+    "test": "NODE_ENV=test mocha",
+    "docs": "npm run docs:openapi && npm run docs:api",
+    "docs:openapi": "generate-openapi > openapi.json",
+    "docs:api": "generate-docs > API.md",
+    "preversion": "npm run lint && npm run compile && npm run docs && git add openapi.json API.md",
+    "postversion": "git push origin $(git rev-parse --abbrev-ref HEAD) --tags"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/koa": "^2.13.5",
+    "@types/mongodb": "^3.6.4",
+    "@ubio/framework": "^15.3.0",
+    "dotenv": "^16.0.3",
+    "inversify": "^6.0.1",
+    "koa": "^2.14.1",
+    "mesh-ioc": "^3.2.0",
+    "mongodb": "^4.4.1",
+    "node-cron": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@nodescript/eslint-config": "^1.0.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^14.14.32",
+    "@types/node-cron": "^3.0.7",
+    "@types/supertest": "^2.0.12",
+    "eslint": "^8.24.0",
+    "mocha": "^10.2.0",
+    "npm-run-all": "^4.1.5",
+    "supertest": "^6.3.3",
+    "typescript": "^4.8.4"
+  }
+}

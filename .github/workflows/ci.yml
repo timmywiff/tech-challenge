@@ -1,0 +1,14 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    name: Compile and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: compile
+        run npm run compile
+
+      - name: npm test
+        run: npm run test
