@@ -7,8 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: install
+        run: npm install
+
       - name: compile
         run: npm run compile
 
-      - name: npm test
+      - name: test
         run: npm run test
