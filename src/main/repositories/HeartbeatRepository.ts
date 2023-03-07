@@ -65,8 +65,8 @@ export class HeartbeatRepository {
         return result || null;
     }
 
-    async deleteHeartbeatById(id: string): Promise<boolean> {
-        const result = await this.collection.deleteOne({ id });
+    async deleteHeartbeat(group: string, id: string): Promise<boolean> {
+        const result = await this.collection.deleteOne({ group, id });
         return result.deletedCount === 1;
     }
 }

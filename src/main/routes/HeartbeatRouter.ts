@@ -55,7 +55,10 @@ export class HeartbeatRouter extends Router {
         path: '/{group}',
         responses: {
             200: {
-                schema: Heartbeat.schema
+                schema: {
+                    type: 'array',
+                    items: Heartbeat.schema
+                }
             }
         }
     })
@@ -78,6 +81,6 @@ export class HeartbeatRouter extends Router {
         @PathParam('id', { schema: { type: 'string' } })
         id: string
     ) {
-        return this.heartbeatRespository.deleteHeartbeatById(id);
+        return this.heartbeatRespository.deleteHeartbeat(group, id);
     }
 }
