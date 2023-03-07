@@ -11,6 +11,13 @@ export interface Heartbeat extends Entity {
     meta?: Record<string, any> | undefined;
 }
 
+export interface Summary {
+    group: string;
+    instances: number;
+    createdAt: number;
+    lastUpdatedAt: number;
+}
+
 export const Heartbeat = new Schema<Heartbeat>({
     schema: {
         type: 'object',

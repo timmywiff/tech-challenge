@@ -2,7 +2,7 @@ import { MongoDb } from '@ubio/framework/modules/mongodb';
 import { dep } from 'mesh-ioc';
 import { Collection, ReturnDocument } from 'mongodb';
 
-import { Heartbeat } from '../schema/Heartbeat.js';
+import { Heartbeat, Summary } from '../schema/Heartbeat.js';
 
 export class HeartbeatRepository {
     @dep() private mongodb!: MongoDb;
@@ -11,13 +11,33 @@ export class HeartbeatRepository {
         return this.mongodb.db.collection<Heartbeat>('heartbeats');
     }
 
-    async getHeartbeats(): Promise<Heartbeat[]> {
-        const result = await this.collection.find({}, { projection: { _id: 0 } }).toArray();
-        return result;
+    async getSummary(): Promise<Summary[]> {
+        const pipeline = [
+            {
+                $group: {
+                    _id: '$group',
+                    instances: { $sum: 1 },
+                    createdAt: { $min: '$createdAt' },
+                    lastUpdatedAt: { $max: '$updatedAt' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    group: '$_id',
+                    instances: 1,
+                    createdAt: 1,
+                    lastUpdatedAt: 1
+                }
+            }
+        ];
+
+        const result = await this.collection.aggregate(pipeline).toArray();
+        return result as Summary[];
     }
 
     async upsertHeartbeat(heartbeat: Heartbeat): Promise<Heartbeat> {
-        const filter = { id: heartbeat.id };
+        const filter = { id: heartbeat.id, group: heartbeat.group };
         const update = {
             $setOnInsert: {
                 id: heartbeat.id,
@@ -36,12 +56,12 @@ export class HeartbeatRepository {
         return result.value as Heartbeat;
     }
 
-    async getHeartbeatByGroup(group: string): Promise<Heartbeat | null> {
-        const result = await this.collection.findOne({ group }, {
+    async getHeartbeatByGroup(group: string): Promise<Heartbeat[] | null> {
+        const result = await this.collection.find({ group }, {
             projection: {
                 '_id': 0
             }
-        });
+        }).toArray();
         return result || null;
     }
 

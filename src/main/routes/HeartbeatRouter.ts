@@ -13,13 +13,23 @@ export class HeartbeatRouter extends Router {
             200: {
                 schema: {
                     type: 'array',
-                    items: Heartbeat.schema
+                    items: {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                group: { type: 'string' },
+                                instances: { type: 'number' },
+                                createdAt: { type: 'number' },
+                                updatedAt: { type: 'number' },
+                            }
+                        }
+                    }
                 }
             }
         }
     })
     async list() {
-        return this.heartbeatRespository.getHeartbeats();
+        return this.heartbeatRespository.getSummary();
     }
 
     @Post({
