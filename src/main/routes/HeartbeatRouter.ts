@@ -18,7 +18,7 @@ export class HeartbeatRouter extends Router {
             }
         }
     })
-    async getAll() {
+    async list() {
         return this.heartbeatRespository.getHeartbeats();
     }
 
@@ -49,7 +49,7 @@ export class HeartbeatRouter extends Router {
             }
         }
     })
-    async getOne(
+    async get(
         @PathParam('group', { schema: { type: 'string' } })
         group: string
     ) {
