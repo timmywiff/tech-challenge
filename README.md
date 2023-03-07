@@ -3,7 +3,7 @@
 ## Setup
 - Install dependencies with `npm install`
 - Run MongoDB with Docker `docker run -p 27017:27017 --name mongodb -d mongo`
-- Set the required environment varibles
+- Set the required environment varibles: MONGO_URL (the full MongoDB URL) and EXPIRATION_THRESHOLD (the number of seconds after which a 'heartbeat' is deemed expired and will be removed).
 
 ## Test
 - Run `npm run test`
