@@ -36,6 +36,20 @@ describe('Router', () => {
             assert.strictEqual(res.header['heartbeat-before-all'], 'true');
             assert(res.header['heartbeat-before-get-one'] == null);
             assert.deepStrictEqual(res.body, [{
+                group: 'group-one',
+                instances: 2,
+                createdAt: 1678180728906,
+                lastUpdatedAt: 1678180729000,
+            }]);
+        });
+
+        it('GET /{group}', async () => {
+            const request = supertest(app.httpServer.callback());
+            const res = await request.get('/group-one');
+            assert.strictEqual(res.status, 200);
+            assert.strictEqual(res.header['heartbeat-before-all'], 'true');
+            assert.strictEqual(res.header['heartbeat-before-get-one'], 'group-one');
+            assert.deepStrictEqual(res.body, [{
                 id: '123456789',
                 group: 'group-one',
                 createdAt: 1678180728906,
@@ -46,27 +60,11 @@ describe('Router', () => {
             },
             {
                 id: '123456790',
-                group: 'group-two',
-                createdAt: 1678180728907,
-                updatedAt: 1678180728907
-            }]);
-        });
-
-        it('GET /{group}', async () => {
-            const request = supertest(app.httpServer.callback());
-            const res = await request.get('/group-one');
-            assert.strictEqual(res.status, 200);
-            assert.strictEqual(res.header['heartbeat-before-all'], 'true');
-            assert.strictEqual(res.header['heartbeat-before-get-one'], 'group-one');
-            assert.deepStrictEqual(res.body, {
-                id: '123456789',
                 group: 'group-one',
-                createdAt: 1678180728906,
-                updatedAt: 1678180728906,
-                meta: {
-                    foo: 'bar'
-                }
-            });
+                createdAt: 1678180728907,
+                updatedAt: 1678180728907,
+            }
+            ]);
         });
 
         it('POST /{group}/{id}', async () => {

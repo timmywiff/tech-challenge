@@ -12,9 +12,16 @@ const heartbeatOne = {
 
 const heartbeatTwo = {
     id: '123456790',
-    group: 'group-two',
+    group: 'group-one',
     createdAt: 1678180728907,
     updatedAt: 1678180728907
+};
+
+const summary = {
+    group: 'group-one',
+    instances: 2,
+    createdAt: 1678180728906,
+    lastUpdatedAt: 1678180729000
 };
 
 export class HeartbeatRouter extends Router {
@@ -24,7 +31,7 @@ export class HeartbeatRouter extends Router {
     }
 
     @Middleware({ path: '/{group}' })
-    async beforeGetOne(
+    async beforeGet(
         @PathParam('group', { schema: { type: 'string' } })
         group: string
     ) {
@@ -33,6 +40,31 @@ export class HeartbeatRouter extends Router {
 
     @Get({
         path: '/',
+        responses: {
+            200: {
+                schema: {
+                    type: 'array',
+                    items: {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                group: { type: 'string' },
+                                instances: { type: 'number' },
+                                createdAt: { type: 'number' },
+                                updatedAt: { type: 'number' },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
+    async getAll() {
+        return [summary];
+    }
+
+    @Get({
+        path: '/{group}',
         responses: {
             200: {
                 schema: {
@@ -53,29 +85,8 @@ export class HeartbeatRouter extends Router {
             }
         }
     })
-    async getAll() {
+    async get() {
         return [heartbeatOne, heartbeatTwo];
-    }
-
-    @Get({
-        path: '/{group}',
-        responses: {
-            200: {
-                schema: {
-                    type: 'object',
-                    properties: {
-                        id: { type: 'string' },
-                        group: { type: 'string' },
-                        createdAt: { type: 'number', optional: true },
-                        updatedAt: { type: 'number', optional: true },
-                        meta: { type: 'object', properties: {}, additionalProperties: true, optional: true, }
-                    }
-                }
-            }
-        }
-    })
-    async getOne() {
-        return heartbeatOne;
     }
 
     @Post({
