@@ -1,4 +1,4 @@
-import { BodyParam, Delete, Get, Middleware, PathParam, Post, Router } from '@ubio/framework';
+import { Delete, Get, Middleware, PathParam, Post, Router } from '@ubio/framework';
 
 const heartbeatOne = {
     id: '123456789',
