@@ -24,6 +24,6 @@ export class ExpirationService {
     }
 
     async runExpirationTasks(): Promise<void> {
-        this.cronService.runMinutely(() => this.deleteOlderThan(this.EXPIRATION_THRESHOLD));
+        this.cronService.runHourly(() => this.deleteOlderThan(this.EXPIRATION_THRESHOLD));
     }
 }
