@@ -66,7 +66,7 @@ export class HeartbeatRouter extends Router {
         @PathParam('group', { schema: { type: 'string' } })
         group: string
     ) {
-        return this.heartbeatRespository.getHeartbeatByGroup(group);
+        return this.heartbeatRespository.getHeartbeatsByGroup(group);
     }
 
     @Delete({

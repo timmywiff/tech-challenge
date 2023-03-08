@@ -11,6 +11,15 @@ export class HeartbeatRepository {
         return this.mongodb.db.collection<Heartbeat>('heartbeats');
     }
 
+    constructor() {
+        this.createIndexes()
+    }
+
+    private async createIndexes(): Promise<void> {
+        await this.collection.createIndex({ group: 1 });
+        await this.collection.createIndex({ id: 1, group: 1 });
+    }
+
     async getSummary(): Promise<Summary[]> {
         const pipeline = [
             {
@@ -37,16 +46,17 @@ export class HeartbeatRepository {
     }
 
     async upsertHeartbeat(heartbeat: Heartbeat): Promise<Heartbeat> {
+        const now = Date.now();
         const filter = { id: heartbeat.id, group: heartbeat.group };
         const update = {
             $setOnInsert: {
                 id: heartbeat.id,
                 group: heartbeat.group,
                 meta: heartbeat.meta,
-                createdAt: Date.now(),
+                createdAt: now,
             },
             $set: {
-                updatedAt: Date.now()
+                updatedAt: now
             }
         };
         const projection = { _id: 0 };
@@ -56,7 +66,7 @@ export class HeartbeatRepository {
         return result.value as Heartbeat;
     }
 
-    async getHeartbeatByGroup(group: string): Promise<Heartbeat[] | null> {
+    async getHeartbeatsByGroup(group: string): Promise<Heartbeat[] | null> {
         const result = await this.collection.find({ group }, {
             projection: {
                 '_id': 0
